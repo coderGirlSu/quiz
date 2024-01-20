@@ -34,4 +34,9 @@ class AttemptSerializer(serializers.Serializer):
     score = serializers.IntegerField(min_value=0)
     date = serializers.DateTimeField(read_only=True)
 
- 
+class AttemptAnswerSerializer(serializers.Serializer):
+    question_id = serializers.IntegerField()
+    answer_id = serializers.ListField(child=serializers.IntegerField())
+
+class CheckAnswersSerializer(serializers.Serializer):
+    answers = AttemptAnswerSerializer(many=True)

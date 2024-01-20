@@ -20,7 +20,7 @@ class QuestionAnswer(models.Model):
 
 class Lesson(models.Model):
     text = models.CharField(max_length=200)
-    lesson = models.ManyToManyField("Question", through="LessonQuestion")
+    # questions = models.ManyToManyField("Question", through="LessonQuestion")
     def __str__(self) -> str:
         return self.text
     
@@ -34,6 +34,7 @@ class Attempt(models.Model):
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
     score = models.PositiveIntegerField(default=0)
     date = models.DateTimeField(auto_now_add=True)
+    user_id = models.IntegerField(default=0)
     def __str__(self) -> str:
-        return self.lesson.text + " - " + str(self.score) + " - " + str(self.date)
+        return self.lesson.text + " - " + str(self.score) + " - " + str(self.date) + " - " + str(self.user_id)
     
