@@ -16,7 +16,7 @@ def lessons(request):
             average_score = 0
         else:
             average_score = int(sum(attempt_scores) / len(attempt_scores))
-        data.append({"lesson":lesson.text, "average_score":average_score})  
+        data.append({"id": lesson.id, "lesson":lesson.text, "average_score":average_score})  
         
     return Response({"lessons":data})
 
