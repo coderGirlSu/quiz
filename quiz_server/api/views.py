@@ -45,8 +45,6 @@ def check_answers(request, lesson_id):
             provided_question_ids = [answer['question_id'] for answer in provided_answers]
         
             # Check if all provided questions are in the lesson
-            print(provided_question_ids)
-            print(lesson_question_ids)
             in_lesson = all(question_id in lesson_question_ids for question_id in provided_question_ids)
             if not in_lesson:
                 print("Question not in lesson")
