@@ -29,10 +29,20 @@ function Lessons() {
         navigate(`/lesson/?lessonid=${lessonId}`);
     };
 
+    function handleLogout() { 
+        fetch(`${BASE_URL}/user/logout/`,{
+            headers: {
+                Authorization: `Token ${localStorage.getItem('token')}`
+            }
+        })
+        localStorage.removeItem('token');
+        navigate('/login');
+    }
+
+
     return (
         <div>
             <h1>Lessons</h1>
-            {/* Render the fetched data */}
             {lessons.map((lesson: Lesson) => (
                 <div key={lesson.id}>
                     <h2>{lesson.lesson}</h2>
@@ -40,6 +50,7 @@ function Lessons() {
                     <button onClick={() => handleStart(lesson.id)}>Start quiz</button>
                 </div>
             ))}
+            <button onClick={handleLogout}>Logout</button>
         </div>
     );
 }
