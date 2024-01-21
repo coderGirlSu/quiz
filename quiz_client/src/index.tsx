@@ -5,6 +5,8 @@ import App from './App';
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+const base_url = 'http://localhost:8000';
+
 root.render(
   <React.StrictMode>
     <App />

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { BASE_URL } from '../config';
 
 interface Lesson {
     id: number;
@@ -13,7 +14,7 @@ function Lessons() {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        fetch('http://localhost:8000/quiz/lessons', {
+        fetch(`${BASE_URL}/quiz/lessons`, {
             headers: {
                 Authorization: `Token ${token}`
             }

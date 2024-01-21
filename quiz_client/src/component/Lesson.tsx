@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../config";
 
 interface Lesson {
   title: string;
@@ -17,8 +18,6 @@ interface Answer {
   text: string;
 }
 
-// const dictionary: { [key: number]: number[] } = {};
-
 function Lesson() {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [dictionary, setDictionary] = useState<{ [key: number]: number[] }>({});
@@ -29,12 +28,12 @@ function Lesson() {
     const fetchLessonData = () => {
       const search = window.location.search;
       const params = new URLSearchParams(search);
-      const lId = params.get("lessonid")
+      const lId = params.get("lessonid");
       setLessonId(lId);
 
       const token = localStorage.getItem("token");
 
-      return fetch(`http://localhost:8000/quiz/lesson/${lId}`, {
+      return fetch(`${BASE_URL}/quiz/lesson/${lId}`, {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -87,7 +86,7 @@ function Lesson() {
 
     const token = localStorage.getItem("token");
 
-    fetch(`http://localhost:8000/quiz/check_answers/${lessonId}`, {
+    fetch(`${BASE_URL}/quiz/check_answers/${lessonId}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

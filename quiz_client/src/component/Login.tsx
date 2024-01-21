@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { BASE_URL } from '../config';    
 
 function Login() {
     const navigate = useNavigate();
@@ -20,7 +21,7 @@ function Login() {
         formData.append('username', username);
         formData.append('password', password);
 
-        fetch('http://localhost:8000/user/login/', {
+        fetch(`${BASE_URL}/user/login/`, {
             method: 'POST',
             body: formData,
         })
