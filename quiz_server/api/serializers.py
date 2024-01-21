@@ -36,7 +36,7 @@ class AttemptSerializer(serializers.Serializer):
 
 class AttemptAnswerSerializer(serializers.Serializer):
     question_id = serializers.IntegerField()
-    answer_id = serializers.ListField(child=serializers.IntegerField())
+    answer_ids = serializers.ListField(child=serializers.IntegerField())
 
 class CheckAnswersSerializer(serializers.Serializer):
     answers = AttemptAnswerSerializer(many=True)

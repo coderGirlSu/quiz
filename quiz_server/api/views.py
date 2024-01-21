@@ -37,7 +37,7 @@ def check_answers(request, lesson_id):
         for answer in provided_answers:
             question = Question.objects.get(pk=answer['question_id']).text
             provided_question_id = answer['question_id']
-            provided_answer_id = answer['answer_id']
+            provided_answer_ids = answer['answer_ids']
         
             # Fetch the question IDs for the provided lesson from the database
             lesson_question_ids = LessonQuestion.objects.filter(lesson=lesson_id).values_list('question_id', flat=True)
@@ -45,6 +45,8 @@ def check_answers(request, lesson_id):
             provided_question_ids = [answer['question_id'] for answer in provided_answers]
         
             # Check if all provided questions are in the lesson
+            print(provided_question_ids)
+            print(lesson_question_ids)
             in_lesson = all(question_id in lesson_question_ids for question_id in provided_question_ids)
             if not in_lesson:
                 print("Question not in lesson")
@@ -59,7 +61,7 @@ def check_answers(request, lesson_id):
                 print("No correct answer found")
             
             # Check if the provided answer is correct
-            is_correct = sorted(provided_answer_id) == sorted(correct_answers_ids)
+            is_correct = sorted(provided_answer_ids) == sorted(correct_answers_ids)
             if is_correct:
                 score += 10
             
