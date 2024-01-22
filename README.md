@@ -87,7 +87,7 @@ Authorization: Token 284376cc2015a1dadbbc974b6208a055cd669b1b
 
 Response
 
-```json
+```text
 status 200
 ```
 
