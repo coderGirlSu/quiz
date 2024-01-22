@@ -7,11 +7,6 @@ from rest_framework import status
 
 from quiz_server.models import Lesson, LessonQuestion, Question, QuestionAnswer
 
-# Create your tests here.
-
-
-        
-
 class LessonsTests(APITestCase):
     def setUp(self):
         self.user = User.objects.create_user(username='test', password='test')

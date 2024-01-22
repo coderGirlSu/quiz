@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../config";
 
@@ -76,7 +76,7 @@ function Lesson() {
     }
   };
 
-  const handleSubmit = () => {
+  function handleSubmit(){
     const data = {
       answers: Object.entries(dictionary).map(([key, value]) => ({
         question_id: parseInt(key),
@@ -129,7 +129,9 @@ function Lesson() {
           ))}
         </div>
       ))}
-      <button onClick={handleSubmit}>Submit</button>
+      <button className="button" onClick={handleSubmit}>
+        Submit
+      </button>
     </div>
   );
 }
