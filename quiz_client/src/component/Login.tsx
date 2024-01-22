@@ -8,19 +8,22 @@ function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
 
+  // Update the username state variable when the user types into the input field
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
   };
-
+  // Update the password state variable when the user types into the input field
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value);
   };
 
   function handleLogin() {
+    // Create formdata object to send in the POST request
     const formData = new FormData();
     formData.append("username", username);
     formData.append("password", password);
 
+    // Send the POST request with form data to the login endpoint
     fetch(`${BASE_URL}/user/login/`, {
       method: "POST",
       body: formData,

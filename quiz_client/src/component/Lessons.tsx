@@ -13,7 +13,13 @@ function Lessons() {
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const navigate = useNavigate();
 
+  // Fetch the lessons data from the lessons endpoint when the component mounts
   useEffect(() => {
+    fetchLessonsData();
+  }, []);
+
+  // Fetch the lessons data using provided token from the lessons endpoint
+  function fetchLessonsData() {
     const token = localStorage.getItem("token");
     fetch(`${BASE_URL}/quiz/lessons`, {
       headers: {
@@ -25,18 +31,22 @@ function Lessons() {
         setLessons(data.lessons);
       })
       .catch((error) => console.error(error));
-  }, []);
+  }
 
+  // Navigate to the lesson component when the user clicks the start quiz button
   const handleStart = (lessonId: number) => {
     navigate(`/lesson/?lessonid=${lessonId}`);
   };
 
+  // Logout the user when the user clicks the logout button
   function handleLogout() {
+    // Remove the token from database
     fetch(`${BASE_URL}/user/logout/`, {
       headers: {
         Authorization: `Token ${localStorage.getItem("token")}`,
       },
     });
+    // Remove the token from local storage and navigate to the login component
     localStorage.removeItem("token");
     navigate("/login");
   }

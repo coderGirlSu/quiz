@@ -24,21 +24,28 @@ function Lesson() {
   const [lessonId, setLessonId] = useState<string | null>("");
   const navigate = useNavigate();
 
+  // Fetch the lesson data from the lesson endpoint when the component mounts
   useEffect(() => {
-    const fetchLessonData = () => {
-      const search = window.location.search;
-      const params = new URLSearchParams(search);
-      const lId = params.get("lessonid");
-      setLessonId(lId);
+    fetchLessonData();
+  }, []);
 
-      const token = localStorage.getItem("token");
-
-      return fetch(`${BASE_URL}/quiz/lesson/${lId}`, {
+  function fetchLessonData() {
+    // Get the lesson id from the query string and set the lesson id state variable
+    const search = window.location.search;
+    const params = new URLSearchParams(search);
+    const lId = params.get("lessonid");
+    setLessonId(lId);
+    // Get the token from local storage
+    const token = localStorage.getItem("token");
+    // Fetch the lesson data from the lesson endpoint with the lesson id and token
+    return (
+      fetch(`${BASE_URL}/quiz/lesson/${lId}`, {
         headers: {
           Authorization: `Token ${token}`,
         },
       })
         .then((response) => response.json())
+        // Transform the fetched data into an array of Question objects
         .then((data) => {
           const questionArray: Question[] = data.map((item: any) => {
             return {
@@ -56,27 +63,31 @@ function Lesson() {
         })
         .catch((error) => {
           console.error("Error fetching lesson data:", error);
-        });
-    };
+        })
+    );
+  }
 
-    fetchLessonData();
-  }, []);
-
+  // Update the dictionary of answers for each question
   const handleAnswer = (questionId: number, answerId: number) => {
+    // Check if the current questionId in the dictionary, if not create a new entry with the questionId as the key and an array containing the answerId as the value
     if (dictionary[questionId] === undefined) {
       dictionary[questionId] = [answerId];
     } else {
+      // Check if the answerId is already in the array, if it is, remove the answerId from the array
       if (dictionary[questionId].includes(answerId)) {
         dictionary[questionId] = dictionary[questionId].filter(
           (item) => item !== answerId
         );
       } else {
+        // If the answerId is not in the array, add the answerId to the array
         dictionary[questionId].push(answerId);
       }
     }
   };
 
-  function handleSubmit(){
+  // Submit the answers to the check answers endpoint and navigate to the score page
+  function handleSubmit() {
+    // Create the data object to send in the POST request
     const data = {
       answers: Object.entries(dictionary).map(([key, value]) => ({
         question_id: parseInt(key),
@@ -85,7 +96,7 @@ function Lesson() {
     };
 
     const token = localStorage.getItem("token");
-
+    // Sends a POST request to the check answer endpoint to check the answers.
     fetch(`${BASE_URL}/quiz/check_answers/${lessonId}`, {
       method: "POST",
       headers: {
@@ -108,7 +119,7 @@ function Lesson() {
       .catch((error) => {
         console.error("Error checking answers:", error);
       });
-  };
+  }
 
   return (
     <div>
