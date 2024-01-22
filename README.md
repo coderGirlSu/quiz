@@ -60,7 +60,7 @@ Login and obtain an access token
 
 Request
 
-```json
+```text
 Form data
 username: Su
 password: thisisapassword
@@ -80,7 +80,7 @@ Destroy login token and logout
 
 Request
 
-```json
+```text
 Headers
 Authorization: Token 284376cc2015a1dadbbc974b6208a055cd669b1b
 ```
@@ -95,7 +95,7 @@ status 200
 
 Get a list of lessons available
 
-```json
+```text
 Headers
 Authorization: Token 284376cc2015a1dadbbc974b6208a055cd669b1b
 ```
@@ -125,7 +125,7 @@ Get a lesson’s questions and answer options
 
 Request
 
-```json
+```text
 GET https://quiz-api.codergirlsu.dev/quiz/lesson/1
 
 Headers
@@ -174,7 +174,7 @@ Submit an attempt at a lesson and get score
 
 Request
 
-```json
+```text
 POST https://quiz-api.codergirlsu.dev/quiz/check_answers/1
 
 Headers
@@ -220,7 +220,7 @@ Response
 
 Request
 
-```json
+```text
 POST https://quiz-api.codergirlsu.dev/quiz/check_answers/1
 
 Headers
@@ -264,4 +264,4 @@ Start the client locally using `npm run start`.
 
 Written using Python 3, Django and the Django REST Framework (DRF). The backend provides a set of APIs to view lessons and attempt quizzes.
 
-Run the API locally using `python3 [manage.py](http://manage.py) runserver`
+Run the API locally using `python3 manage.py runserver`
