@@ -1,14 +1,16 @@
 from datetime import date
 from rest_framework.response import Response
 from quiz_server.models import Attempt, Lesson, LessonQuestion, Question, QuestionAnswer
-from quiz_server.api.serializers import CheckAnswersSerializer, LessonSerializer, LessonQuestionSerializer, QuestionAnswerSerializer
+from quiz_server.api.serializers import CheckAnswersSerializer, LessonQuestionSerializer
 from rest_framework.decorators import api_view
 
+# Use the @api_view decorator to specify which HTTP methods are allowed
 @api_view(['GET'])
+# Get all lessons from the database, calculates the average score for each lesson and returns the data
 def lessons(request): 
     lessons = Lesson.objects.all()
     data = []
-
+    
     for lesson in lessons:
         # get all attempt scores for this lesson and user
         attempt_scores = Attempt.objects.filter(lesson=lesson.id, user_id=request.user.id).values_list('score', flat=True)
@@ -20,12 +22,14 @@ def lessons(request):
         
     return Response({"lessons":data})
 
+# Get all questions for a specific lesson
 @api_view(['GET'])
 def lesson(request, lesson_id):
     lesson = LessonQuestion.objects.filter(lesson=lesson_id)
     serializer = LessonQuestionSerializer(lesson, many=True)
     return Response(serializer.data)
 
+# Check the provided answers against the correct answers in the database
 @api_view(['POST'])
 def check_answers(request, lesson_id):
     results = []
@@ -74,6 +78,5 @@ def check_answers(request, lesson_id):
         Attempt.objects.create(lesson=lesson, score=score, date=date.today(), user_id=request.user.id)
     
         return Response({"results":results,"score":score})
-    
     else:
         return Response(serializer.errors, status=400)
