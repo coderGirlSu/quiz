@@ -10,7 +10,6 @@ from rest_framework.decorators import api_view
 def lessons(request): 
     lessons = Lesson.objects.all()
     data = []
-    
     for lesson in lessons:
         # get all attempt scores for this lesson and user
         attempt_scores = Attempt.objects.filter(lesson=lesson.id, user_id=request.user.id).values_list('score', flat=True)
@@ -18,15 +17,15 @@ def lessons(request):
             average_score = 0
         else:
             average_score = int(sum(attempt_scores) / len(attempt_scores))
-        data.append({"id": lesson.id, "lesson":lesson.text, "average_score":average_score})  
+        data.append({"id": lesson.id, "lesson":lesson.text, "average_score":average_score})
         
     return Response({"lessons":data})
 
 # Get all questions for a specific lesson
 @api_view(['GET'])
 def lesson(request, lesson_id):
-    lesson = LessonQuestion.objects.filter(lesson=lesson_id)
-    serializer = LessonQuestionSerializer(lesson, many=True)
+    lesson_questions = LessonQuestion.objects.filter(lesson=lesson_id)
+    serializer = LessonQuestionSerializer(lesson_questions, many=True)
     return Response(serializer.data)
 
 # Check the provided answers against the correct answers in the database
@@ -38,22 +37,24 @@ def check_answers(request, lesson_id):
     serializer = CheckAnswersSerializer(data= request.data)
     if serializer.is_valid():
         provided_answers = serializer.data['answers']
+        
+        # Check if provided questions are all in the provided lesson
+        # Fetch the question IDs for the provided lesson from the database
+        lesson_question_ids = LessonQuestion.objects.filter(lesson=lesson_id).values_list('question_id', flat=True)
+        # Fetch the question IDs provided by the client
+        provided_question_ids = [answer['question_id'] for answer in provided_answers]
+        # Check if all provided questions are in the lesson
+        
+        in_lesson = all(question_id in lesson_question_ids for question_id in provided_question_ids)
+        if not in_lesson:
+            print("Question not in lesson")
+            return Response({"error": "Question does not exist in this lesson"}, status=400)
+        
         for answer in provided_answers:
             question = Question.objects.get(pk=answer['question_id']).text
             provided_question_id = answer['question_id']
             provided_answer_ids = answer['answer_ids']
         
-            # Fetch the question IDs for the provided lesson from the database
-            lesson_question_ids = LessonQuestion.objects.filter(lesson=lesson_id).values_list('question_id', flat=True)
-            # Fetch the question IDs provided by the client
-            provided_question_ids = [answer['question_id'] for answer in provided_answers]
-        
-            # Check if all provided questions are in the lesson
-            in_lesson = all(question_id in lesson_question_ids for question_id in provided_question_ids)
-            if not in_lesson:
-                print("Question not in lesson")
-                return Response({"error": "Question does not exist in this lesson"}, status=400)
-       
             # Fetch the correct answer from the database
             correct_answers = QuestionAnswer.objects.filter(question=provided_question_id, is_correct=True)
             if correct_answers.exists():

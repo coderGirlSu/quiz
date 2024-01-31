@@ -1,18 +1,18 @@
 from rest_framework import serializers
 from quiz_server.models import QuestionAnswer, Question, Answer
 
-class LessonSerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
-    text = serializers.CharField(max_length=200)
+# class LessonSerializer(serializers.Serializer):
+#     id = serializers.IntegerField(read_only=True)
+#     text = serializers.CharField(max_length=200)
    
-class QuestionAnswerSerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
-    question = serializers.PrimaryKeyRelatedField(queryset=Question.objects.all())
-    answer = serializers.PrimaryKeyRelatedField(queryset=Answer.objects.all())
-    is_correct = serializers.BooleanField(read_only=True, default=False)
+# class QuestionAnswerSerializer(serializers.Serializer):
+#     id = serializers.IntegerField(read_only=True)
+#     question = serializers.PrimaryKeyRelatedField(queryset=Question.objects.all())
+#     answer = serializers.PrimaryKeyRelatedField(queryset=Answer.objects.all())
+#     is_correct = serializers.BooleanField(read_only=True, default=False)
     
-    def create(self, validated_data):
-        return QuestionAnswer.objects.create(**validated_data)
+#     def create(self, validated_data):
+#         return QuestionAnswer.objects.create(**validated_data)
     
 class AnswerSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
